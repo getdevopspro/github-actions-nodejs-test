@@ -1,0 +1,18 @@
+name: Build
+
+on:
+  workflow_call:
+    outputs:
+      image-digests:
+        description: 'The output image digests'
+        value: ${{ jobs.build.outputs.image-digests }}
+
+jobs:
+  build:
+    name: Build
+    uses: getdevopspro/github-actions/.github/workflows/build.yml@v6.0.3
+    with:
+      version-package: package.json
+      version-package-lock: package-lock.json
+      pre-lint-command: NODEAPP_UID=$(id -u) NODEAPP_RESTART_POLICY=no NODEAPP_COMMAND="bash -c 'npm ci --ignore-scripts; npm run lint'" docker compose up nodeapp --force-recreate --remove-orphans --abort-on-container-exit --exit-code-from nodeapp
+      pre-test-unit-command: NODEAPP_UID=$(id -u) NODEAPP_RESTART_POLICY=no NODEAPP_COMMAND="bash -c 'npm ci --ignore-scripts; npm run test'" docker compose up nodeapp --force-recreate --remove-orphans --abort-on-container-exit --exit-code-from nodeapp

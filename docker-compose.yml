@@ -1,0 +1,23 @@
+services:
+  nodeapp:
+    image: ${NODEAPP_IMAGE:-nodeapp:dev}
+    user: '${NODEAPP_UID:-1000}'
+    working_dir: '${NODEAPP_WORKING_DIR:-/home/node/app}'
+    network_mode: 'host'
+    env_file:
+      - path: '${NODEAPP_ENV_FILE:-.env}'
+        required: false
+    restart: '${NODEAPP_RESTART_POLICY:-unless-stopped}'
+    build:
+      context: .
+      args:
+        NODE_UID: '${NODEAPP_UID:-1000}'
+      dockerfile: '${NODEAPP_DOCKERFILE:-Dockerfile}'
+      target: '${NODEAPP_DOCKERFILE_TARGET:-nodeapp-dev}'
+    environment:
+      - PORT=${NODEAPP_PORT:-5173}
+      - NODE_UID=${NODEAPP_UID:-1000}
+    volumes:
+      - './:${NODEAPP_WORKING_DIR:-/home/node/app}:rw,z'
+    stdin_open: ${NODEAPP_STDIN_OPEN:-false}
+    command: ${NODEAPP_COMMAND:-bash -c "npm i; npm run dev -- --host 0.0.0.0 --port ${NODEAPP_PORT:-5173}"}
