@@ -1,4 +1,4 @@
-name: Build
+name: Node
 
 on:
   workflow_call:
@@ -8,8 +8,8 @@ on:
         value: ${{ jobs.build.outputs.image-digests }}
 
 jobs:
-  build:
-    name: Build
+  node:
+    name: Node
     uses: getdevopspro/github-actions/.github/workflows/build.yml@v6.0.3
     with:
       version-package: package.json
