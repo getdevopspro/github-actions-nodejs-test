@@ -1,4 +1,4 @@
-name: Release
+name: CI
 
 on:
   push:
@@ -20,11 +20,11 @@ permissions:
 
 jobs:
   build:
-    name: CI
+    name: Build
     uses: ./.github/workflows/build.yaml
 
   promote:
-    name: CI
+    name: Promote
     needs: build
     uses: getdevopspro/github-actions/.github/workflows/promote.yml@v6.0.3
     with:
