@@ -1,6 +1,6 @@
 # GitHub Actions Nodejs Test
 
-A minimal Node.js/Express application for testing GitHub Actions, Docker builds, and docker-bake workflows.
+A minimal Node.js/Express application for testing [GitHub Actions](https://github.com/getdevopspro/github-actions), Docker builds, and docker-bake workflows.
 
 ## Quick Start
 
