@@ -1,3 +1,5 @@
+name: ''
+
 on:
   workflow_call:
     outputs:
@@ -7,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: ''
     uses: getdevopspro/github-actions/.github/workflows/build.yml@v6.0.3
     with:
       version-package: package.json
