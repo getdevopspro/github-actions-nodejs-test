@@ -1,4 +1,4 @@
-name: PR
+name: CI
 
 on:
   pull_request:
@@ -13,6 +13,6 @@ permissions:
   packages: write
 
 jobs:
-  ci:
-    name: CI
+  build:
+    name: Build
     uses: ./.github/workflows/build.yaml
