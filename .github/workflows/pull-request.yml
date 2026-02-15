@@ -14,5 +14,5 @@ permissions:
 
 jobs:
   build:
-    name: Build
+    name: Job
     uses: ./.github/workflows/build.yaml
