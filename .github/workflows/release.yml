@@ -20,11 +20,11 @@ permissions:
 
 jobs:
   build:
-    name: Build
+    name: Job
     uses: ./.github/workflows/build.yaml
 
   promote:
-    name: Promote
+    name: Job
     needs: build
     uses: getdevopspro/github-actions/.github/workflows/promote.yml@v6.0.3
     with:
