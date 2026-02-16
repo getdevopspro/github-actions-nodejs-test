@@ -24,7 +24,10 @@ jobs:
   promote:
     name: Job
     needs: build
-    uses: getdevopspro/github-actions/.github/workflows/promote.yml@v6.0.3
+    uses: getdevopspro/github-actions/.github/workflows/promote.yml@v6.0.4
+    secrets:
+      # To bypass ruleset enforcing checks
+      checkout-token: ${{ secrets.BOT_RELEASE_CHECKOUT_TOKEN }}
     with:
       version-package: package.json
       git-add-files: package.json
