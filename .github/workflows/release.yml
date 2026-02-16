@@ -1,4 +1,4 @@
-name: CI
+name: Release
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - 'v*'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.repository }}
+  group: ${{ github.workflow }}
   cancel-in-progress: false
 
 permissions:

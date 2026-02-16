@@ -1,11 +1,11 @@
-name: CI
+name: Pull Request
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
