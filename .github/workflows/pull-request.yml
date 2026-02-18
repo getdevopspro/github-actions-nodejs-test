@@ -11,8 +11,34 @@ concurrency:
 permissions:
   contents: read
   packages: write
+  pull-requests: write
 
 jobs:
-  build:
+  test-robot-unlabel:
+    if: github.event.action == 'synchronize'
     name: Job
-    uses: ./.github/workflows/build.yaml
+    uses: ./.github/workflows/test-robot-unlabel.yml
+    with:
+      label-test-robot-done: test-robot-done
+      label-test-robot-needed: test-robot-needed
+    secrets:
+      token: ${{ secrets.BOT_PR_TOKEN }}
+
+  build:
+    needs: test-robot-unlabel
+    if: ${{ !failure() && !cancelled() && needs.test-robot-unlabel.result != 'failure' }}
+    name: Job
+    uses: ./.github/workflows/build.yml
+
+  test-robot-check:
+    needs: build
+    name: Job
+    uses: ./.github/workflows/test-robot-check.yml
+    with:
+      label-test-robot-done: test-robot-done
+      label-test-robot-needed: test-robot-needed
+
+  all-green:
+    needs: test-robot-check
+    name: Job
+    uses: ./.github/workflows/all-green.yml

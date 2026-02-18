@@ -19,12 +19,12 @@ permissions:
 jobs:
   build:
     name: Job
-    uses: ./.github/workflows/build.yaml
+    uses: ./.github/workflows/build.yml
 
   promote:
     name: Job
     needs: build
-    uses: getdevopspro/github-actions/.github/workflows/promote.yml@v6.0.4
+    uses: getdevopspro/github-actions/.github/workflows/promote.yml@v6.1.1
     secrets:
       # To bypass ruleset enforcing checks
       checkout-token: ${{ secrets.BOT_RELEASE_CHECKOUT_TOKEN }}

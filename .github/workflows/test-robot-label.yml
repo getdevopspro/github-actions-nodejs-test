@@ -1,0 +1,46 @@
+name: Robot Test Label
+
+on:
+  workflow_call:
+    inputs:
+      label-test-robot-done:
+        description: 'Label name indicating the PR has been test-robot-done'
+        type: string
+        required: false
+        default: 'test-robot-done'
+      label-test-robot-needed:
+        description: 'Label name indicating the PR needs robot testing'
+        type: string
+        required: false
+        default: 'test-robot-needed'
+    secrets:
+      token:
+        description: 'PAT used to post comments'
+        required: false
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
+
+jobs:
+  test-robot-label:
+    if: github.event.action == 'labeled' &&
+      github.event.label.name == inputs['label-test-robot-done']
+    name: Robot Test Label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Robot Test Label
+        uses: ./.github/actions/test-robot-label
+        with:
+          label-test-robot-done: ${{ inputs.label-test-robot-done }}
+          label-test-robot-needed: ${{ inputs.label-test-robot-needed }}
+          token: ${{ secrets.token }}
+
+      - name: Rerun pull-request workflow
+        uses: getdevopspro/github-actions/pr/checks-rerun@v6.1.1
+        with:
+          workflow-id: pull-request.yml
+          github-token: ${{ secrets.token }}
