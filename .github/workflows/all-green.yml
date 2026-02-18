@@ -1,0 +1,14 @@
+name: All Green
+
+on:
+  workflow_call:
+
+jobs:
+  all-green:
+    name: All Green
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: All Green
+        uses: getdevopspro/github-actions/all-green@v6.1.1
