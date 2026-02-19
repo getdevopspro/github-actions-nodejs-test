@@ -15,7 +15,7 @@ on:
         default: 'test-robot-needed'
     secrets:
       token:
-        description: 'PAT used to post comments'
+        description: 'GitHub token or PAT'
         required: false
 
 permissions:
@@ -26,12 +26,12 @@ jobs:
   test-robot-unlabel:
     if: contains(github.event.pull_request.labels.*.name, inputs.label-test-robot-done)
     name: Robot Test Unlabel
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest|
     steps:
       - uses: actions/checkout@v4
 
       - name: Robot Test Unlabel
-        uses: ./.github/actions/test/unlabel
+        uses: getdevopspro/github-actions/test/unlabel@v6.2.2
         with:
           label-done: ${{ inputs.label-test-robot-done }}
           label-needed: ${{ inputs.label-test-robot-needed }}
