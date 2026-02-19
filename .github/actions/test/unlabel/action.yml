@@ -1,15 +1,19 @@
-name: "Robot Test Unlabel"
-description: "On new commits, removes the test-robot-done label if present and posts a comment."
+name: "Test Unlabel"
+description: "On new commits, removes the label-done label if present and posts a comment."
 
 inputs:
-  label-test-robot-needed:
-    description: 'Label indicating the PR needs robot testing'
+  label-needed:
+    description: 'Label indicating the PR needs testing'
     required: false
-    default: 'test-robot-needed'
-  label-test-robot-done:
-    description: 'Label indicating the PR has been robot-tested'
+    default: 'test-needed'
+  label-done:
+    description: 'Label indicating the PR has been tested'
     required: false
-    default: 'test-robot-done'
+    default: 'test-done'
+  test-name:
+    description: 'Name of the test type used in comments (e.g. Robot)'
+    required: false
+    default: 'Test'
   token:
     description: 'GitHub token or PAT used to remove labels and post comments (defaults to github.token)'
     required: false
@@ -23,8 +27,9 @@ runs:
       with:
         github-token: ${{ inputs.token || github.token }}
         script: |
-          const labelDone   = '${{ inputs.label-test-robot-done }}';
-          const labelNeeded = '${{ inputs.label-test-robot-needed }}';
+          const labelDone   = '${{ inputs.label-done }}';
+          const labelNeeded = '${{ inputs.label-needed }}';
+          const testName    = '${{ inputs.test-name }}';
           const { number: pr, head: { sha } } = context.payload.pull_request;
           const repo = context.repo;
 
@@ -49,10 +54,10 @@ runs:
 
           const shaLine = sha ? `\n\n**Commit:** \`${sha}\`` : '';
           const warning = !has.has(labelNeeded)
-            ? `\n\n> [!WARNING]\n> \`${labelDone}\` was removed but \`${labelNeeded}\` was not present. This PR may not be queued for robot testing.`
+            ? `\n\n> [!WARNING]\n> \`${labelDone}\` was removed but \`${labelNeeded}\` was not present. This PR may not be queued for ${testName} testing.`
             : '';
 
           await postComment(
-            `### 🔄 Robot Test Label Removed\n\n` +
-            `New commits were pushed. \`${labelDone}\` has been removed and robot testing must be repeated.${shaLine}${warning}`
+            `### 🔄 ${testName} Label Removed\n\n` +
+            `New commits were pushed. \`${labelDone}\` has been removed and ${testName} testing must be repeated.${shaLine}${warning}`
           );
