@@ -1,15 +1,19 @@
-name: "Robot Test Label"
-description: "When the test-robot-done label is added, posts a comment confirming the robot test status."
+name: "Test Label"
+description: "When the label-done label is added, posts a comment confirming the test status."
 
 inputs:
-  label-test-robot-needed:
-    description: 'Label indicating the PR needs robot testing'
+  label-needed:
+    description: 'Label indicating the PR needs testing'
     required: false
-    default: 'test-robot-needed'
-  label-test-robot-done:
-    description: 'Label indicating the PR has been robot-tested'
+    default: 'test-needed'
+  label-done:
+    description: 'Label indicating the PR has been tested'
     required: false
-    default: 'test-robot-done'
+    default: 'test-done'
+  test-name:
+    description: 'Name of the test type used in comments (e.g. Robot)'
+    required: false
+    default: 'Test'
   token:
     description: 'GitHub token or PAT used to post comments (defaults to github.token)'
     required: false
@@ -23,8 +27,9 @@ runs:
       with:
         github-token: ${{ inputs.token || github.token }}
         script: |
-          const labelDone   = '${{ inputs.label-test-robot-done }}';
-          const labelNeeded = '${{ inputs.label-test-robot-needed }}';
+          const labelDone   = '${{ inputs.label-done }}';
+          const labelNeeded = '${{ inputs.label-needed }}';
+          const testName    = '${{ inputs.test-name }}';
           const { number: pr, head: { sha } } = context.payload.pull_request;
           const repo = context.repo;
 
@@ -44,9 +49,9 @@ runs:
             if (has.has(labelNeeded)) {
               core.warning(`\`${labelDone}\` not found. \`${labelNeeded}\` is present but testing is not confirmed.`);
               await postComment(
-                `### ⚠️ Robot Testing Incomplete\n\n` +
+                `### ⚠️ ${testName} Testing Incomplete\n\n` +
                 `\`${labelNeeded}\` is present but \`${labelDone}\` has not been added yet.${shaLine}\n\n` +
-                `> [!WARNING]\n> Add \`${labelDone}\` once robot testing is complete.`
+                `> [!WARNING]\n> Add \`${labelDone}\` once ${testName} testing is complete.`
               );
             } else {
               core.info(`\`${labelDone}\` not present. Nothing to do.`);
@@ -56,6 +61,6 @@ runs:
 
           core.info(`\`${labelDone}\` found. Posting confirmation comment.`);
           await postComment(
-            `### ✅ Robot Test Complete\n\n` +
-            `\`${labelDone}\` has been added. Robot testing has been confirmed for this PR.${shaLine}`
+            `### ✅ ${testName} Complete\n\n` +
+            `\`${labelDone}\` has been added. ${testName} testing has been confirmed for this PR.${shaLine}`
           );
