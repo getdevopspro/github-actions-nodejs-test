@@ -40,12 +40,12 @@ runs:
           const has = new Set(labels.map(l => l.name));
 
           if (!has.has(labelNeeded)) {
-            core.info(`\`${labelNeeded}\` not present — no robot testing required.`);
+            core.info(`\`${labelNeeded}\` not present. No robot testing required.`);
             return;
           }
 
           if (has.has(labelDone)) {
-            core.info(`\`${labelDone}\` present — robot testing confirmed.`);
+            core.info(`\`${labelDone}\` present. Robot testing confirmed.`);
             return;
           }
 
@@ -55,4 +55,4 @@ runs:
             `\`${labelNeeded}\` is present but \`${labelDone}\` has not been added. This PR cannot be merged until robot testing is complete.${shaLine}\n\n` +
             `> [!IMPORTANT]\n> Add \`${labelDone}\` once robot testing is complete.`
           );
-          core.setFailed(`\`${labelNeeded}\` is present but \`${labelDone}\` has not been added — robot testing must be completed before merging.`);
+          core.setFailed(`\`${labelNeeded}\` is present but \`${labelDone}\` has not been added. Robot testing must be completed before merging.`);

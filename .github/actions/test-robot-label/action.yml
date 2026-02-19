@@ -42,20 +42,20 @@ runs:
 
           if (!has.has(labelDone)) {
             if (has.has(labelNeeded)) {
-              core.warning(`\`${labelDone}\` not found — \`${labelNeeded}\` is present but testing is not confirmed.`);
+              core.warning(`\`${labelDone}\` not found. \`${labelNeeded}\` is present but testing is not confirmed.`);
               await postComment(
                 `### ⚠️ Robot Testing Incomplete\n\n` +
                 `\`${labelNeeded}\` is present but \`${labelDone}\` has not been added yet.${shaLine}\n\n` +
                 `> [!WARNING]\n> Add \`${labelDone}\` once robot testing is complete.`
               );
             } else {
-              core.info(`\`${labelDone}\` not present — nothing to do.`);
+              core.info(`\`${labelDone}\` not present. Nothing to do.`);
             }
             return;
           }
 
-          core.info(`\`${labelDone}\` found — posting confirmation comment.`);
+          core.info(`\`${labelDone}\` found. Posting confirmation comment.`);
           await postComment(
             `### ✅ Robot Test Complete\n\n` +
-            `\`${labelDone}\` has been added — robot testing has been confirmed for this PR.${shaLine}`
+            `\`${labelDone}\` has been added. Robot testing has been confirmed for this PR.${shaLine}`
           );
