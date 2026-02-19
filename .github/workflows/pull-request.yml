@@ -12,6 +12,7 @@ permissions:
   contents: read
   packages: write
   pull-requests: write
+  checks: read
 
 jobs:
   test-robot-unlabel:
