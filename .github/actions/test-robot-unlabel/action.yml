@@ -40,7 +40,7 @@ runs:
           const has = new Set(labels.map(l => l.name));
 
           if (!has.has(labelDone)) {
-            core.info(`\`${labelDone}\` not present — nothing to do.`);
+            core.info(`\`${labelDone}\` not present. Nothing to do.`);
             return;
           }
 
@@ -49,7 +49,7 @@ runs:
 
           const shaLine = sha ? `\n\n**Commit:** \`${sha}\`` : '';
           const warning = !has.has(labelNeeded)
-            ? `\n\n> [!WARNING]\n> \`${labelDone}\` was removed but \`${labelNeeded}\` was not present — this PR may not be queued for robot testing.`
+            ? `\n\n> [!WARNING]\n> \`${labelDone}\` was removed but \`${labelNeeded}\` was not present. This PR may not be queued for robot testing.`
             : '';
 
           await postComment(
