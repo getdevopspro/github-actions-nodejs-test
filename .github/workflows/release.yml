@@ -30,7 +30,8 @@ jobs:
       checkout-token: ${{ secrets.BOT_REPO_TOKEN }}
     with:
       version-package: package.json
-      git-add-files: package.json
+      version-package-lock: package-lock.json
+      git-add-files: package.json package-lock.json
       git-user-name: getdevopspro-cibot
       git-user-email: 203600057+getdevopspro-cibot@users.noreply.github.com
       image-digests: ${{ needs.build.outputs.image-digests }}
