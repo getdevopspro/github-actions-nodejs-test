@@ -21,4 +21,4 @@ jobs:
       label-test-robot-done: test-robot-done
       label-test-robot-needed: test-robot-needed
     secrets:
-      token: ${{ secrets.BOT_PR_TOKEN }}
+      token: ${{ secrets.BOT_REPO_TOKEN }}
