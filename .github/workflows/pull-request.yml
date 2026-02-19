@@ -40,5 +40,6 @@ jobs:
 
   all-green:
     needs: test-robot-check
+    if: ${{ !cancelled() }}
     name: Job
     uses: ./.github/workflows/all-green.yml
