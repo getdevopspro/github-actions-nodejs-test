@@ -25,15 +25,19 @@ permissions:
 
 jobs:
   test-robot-label:
-    if: github.event.action == 'labeled' &&
-      github.event.label.name == inputs['label-test-robot-done']
+    if: >
+      github.event.label.name == inputs['label-test-robot-done'] ||
+      github.event.label.name == inputs['label-test-robot-needed']
     name: Robot Test Label
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Robot Test Label
-        uses: getdevopspro/github-actions/test/label@v6.2.4
+      - name: Robot Test Done Label
+        if: >
+          github.event.action == 'labeled' &&
+          github.event.label.name == inputs['label-test-robot-done']
+        uses: getdevopspro/github-actions/test/label/done/added@v6.3.2
         with:
           label-done: ${{ inputs.label-test-robot-done }}
           label-needed: ${{ inputs.label-test-robot-needed }}
@@ -41,7 +45,8 @@ jobs:
           token: ${{ secrets.token }}
 
       - name: Rerun pull-request workflow
-        uses: getdevopspro/github-actions/pr/checks-rerun@v6.2.4
+        uses: getdevopspro/github-actions/pr/job-rerun@v6.3.2
         with:
           workflow-id: pull-request.yml
           token: ${{ secrets.token }}
+          job-name: "Job / Robot Test Check"
