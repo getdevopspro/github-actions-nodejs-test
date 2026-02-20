@@ -1,4 +1,4 @@
-name: Robot Test Unlabel
+name: Remove Robot Test
 
 on:
   workflow_call:
@@ -23,15 +23,15 @@ permissions:
   pull-requests: write
 
 jobs:
-  test-robot-unlabel:
-    if: contains(github.event.pull_request.labels.*.name, inputs.label-test-robot-done)
-    name: Robot Test Unlabel
-    runs-on: ubuntu-latest|
+  test-robot-remove:
+    if: github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, inputs.label-test-robot-done)
+    name: Remove Robot Test
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Robot Test Unlabel
-        uses: getdevopspro/github-actions/test/unlabel@v6.2.4
+      - name: Remove Robot Test Label
+        uses: getdevopspro/github-actions/test/label/done/remove@v6.3.2
         with:
           label-done: ${{ inputs.label-test-robot-done }}
           label-needed: ${{ inputs.label-test-robot-needed }}

@@ -24,14 +24,13 @@ permissions:
 
 jobs:
   test-robot-check-labels:
-    if: contains(github.event.pull_request.labels.*.name, inputs.label-test-robot-needed) || github.run_attempt > 1
     name: Robot Test Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Robot Test Check
-        uses: getdevopspro/github-actions/test/check@v6.2.4
+        uses: getdevopspro/github-actions/test/label/check@v6.3.2
         with:
           label-done: ${{ inputs.label-test-robot-done }}
           label-needed: ${{ inputs.label-test-robot-needed }}

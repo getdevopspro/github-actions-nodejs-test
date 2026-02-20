@@ -15,10 +15,9 @@ permissions:
   checks: read
 
 jobs:
-  test-robot-unlabel:
-    if: github.event.action == 'synchronize'
+  test-robot-remove:
     name: Job
-    uses: ./.github/workflows/test-robot-unlabel.yml
+    uses: ./.github/workflows/test-robot-remove.yml
     with:
       label-test-robot-done: test-robot-done
       label-test-robot-needed: test-robot-needed
@@ -26,18 +25,25 @@ jobs:
       token: ${{ secrets.BOT_REPO_TOKEN }}
 
   build:
-    needs: test-robot-unlabel
-    if: ${{ !failure() && !cancelled() && needs.test-robot-unlabel.result != 'failure' }}
+    needs: test-robot-remove
+    if: ${{ !failure() && !cancelled() && needs.test-robot-remove.result != 'failure' }}
     name: Job
     uses: ./.github/workflows/build.yml
+    # runs-on: ubuntu-latest
+    # name: Build
+    # steps:
+    #   - run: echo "Build step - replace with actual build commands"
 
   test-robot-check:
     needs: build
+    if: ${{ !cancelled() }}
     name: Job
     uses: ./.github/workflows/test-robot-check.yml
     with:
       label-test-robot-done: test-robot-done
       label-test-robot-needed: test-robot-needed
+    secrets:
+      token: ${{ secrets.BOT_REPO_TOKEN }}
 
   all-green:
     needs: test-robot-check
